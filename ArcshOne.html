@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>ArcshOne | Next-Gen Cybersecurity — AI SIEM & Phishing Defense</title>
+  <!-- Google Fonts + Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: #0a0c15;
+      color: #ffffff;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    /* animated gradient orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      z-index: -1;
+      pointer-events: none;
+      animation: floatOrb 18s infinite alternate ease-in-out;
+    }
+    .orb1 { width: 500px; height: 500px; background: radial-gradient(circle, #ff3366, #ff00cc); top: -100px; left: -150px; }
+    .orb2 { width: 600px; height: 600px; background: radial-gradient(circle, #00ccff, #0066ff); bottom: -200px; right: -100px; animation-duration: 24s; }
+    .orb3 { width: 400px; height: 400px; background: radial-gradient(circle, #ffaa00, #ff6600); top: 40%; left: 70%; animation-duration: 20s; opacity: 0.3; }
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(80px, 60px) scale(1.2); }
+    }
+
+    /* noise overlay */
+    .noise::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjciIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMDMiLz48L3N2Zz4=');
+      opacity: 0.08;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* glassmorphic header */
+    header {
+      padding: 1rem 0;
+      backdrop-filter: blur(16px);
+      background: rgba(5, 8, 20, 0.55);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+
+    .nav-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(125deg, #FFFFFF, #4d9eff, #ff4d9e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.02em;
+    }
+    .logo span {
+      font-size: 0.8rem;
+      background: linear-gradient(95deg, #aaffff, #7a6eff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 500;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: #e2eaff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.25s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: linear-gradient(90deg, #0ff, #f0f);
+      transition: 0.3s;
+    }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a:hover { color: #ffffff; text-shadow: 0 0 6px cyan; }
+
+    .btn-glow {
+      background: linear-gradient(105deg, #ff3b6f, #9b4dff);
+      border: none;
+      padding: 0.55rem 1.5rem;
+      border-radius: 40px;
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 0 12px rgba(255,59,111,0.4);
+      cursor: pointer;
+    }
+    .btn-glow:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 22px #ff3b6f;
+    }
+
+    /* hero with rich colors */
+    .hero {
+      padding: 6rem 0 4rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+    .hero-content { flex: 1; }
+    .hero-badge {
+      display: inline-flex;
+      gap: 8px;
+      background: rgba(0, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      padding: 0.4rem 1.2rem;
+      border-radius: 60px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: 1px solid rgba(0,255,200,0.5);
+      color: #b3ffff;
+      margin-bottom: 1.8rem;
+    }
+    .hero-content h2 {
+      font-size: 3.8rem;
+      font-weight: 800;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #FFFFFF, #5dade2, #f368e0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .gradient-text {
+      background: linear-gradient(95deg, #ff9966, #ff5e62);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-content p {
+      font-size: 1.2rem;
+      color: #bfd6ff;
+      margin: 1.5rem 0;
+      border-left: 3px solid #ff4d6d;
+      padding-left: 1.2rem;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin: 2rem 0;
+    }
+    .stat span:first-child {
+      font-weight: 800;
+      font-size: 2rem;
+      background: linear-gradient(145deg, cyan, #ff77aa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .btn-primary-neon {
+      background: linear-gradient(95deg, #00c6ff, #0072ff);
+      border: none;
+      padding: 1rem 2.2rem;
+      font-weight: 700;
+      border-radius: 60px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 8px 20px rgba(0,114,255,0.4);
+      color: white;
+    }
+    .hero-visual i {
+      font-size: 12rem;
+      filter: drop-shadow(0 0 28px #ff4d9e) drop-shadow(0 0 18px #00ffff);
+      animation: levitate 4s infinite alternate;
+    }
+    @keyframes levitate {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-20px); }
+    }
+
+    /* cards with vibrant gradients */
+    .section-title {
+      text-align: center;
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin: 3rem 0 2rem;
+      background: linear-gradient(120deg, #ffffff, #a6c1ff, #ffb3e6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .solutions-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin: 2rem 0 3rem;
+    }
+    .solution-card {
+      background: rgba(15, 25, 45, 0.6);
+      backdrop-filter: blur(12px);
+      border-radius: 2rem;
+      padding: 2rem;
+      width: 280px;
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .solution-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top right, rgba(255,77,109,0.2), transparent);
+      opacity: 0;
+      transition: 0.5s;
+    }
+    .solution-card:hover::before { opacity: 1; }
+    .solution-card:hover {
+      border-color: #ff4d6d;
+      transform: translateY(-12px);
+      box-shadow: 0 20px 35px -8px rgba(255, 77, 109, 0.3);
+    }
+    .sol-icon {
+      font-size: 3.2rem;
+      background: linear-gradient(145deg, #0ff, #f0f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 1rem;
+    }
+    .solution-card h3 { font-size: 1.7rem; margin: 1rem 0; }
+    .card-tag {
+      background: linear-gradient(95deg, #ff3366, #ff884d);
+      display: inline-block;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: bold;
+    }
+
+    /* about rich section */
+    .about-section {
+      background: linear-gradient(125deg, rgba(20,30,60,0.7), rgba(10,15,40,0.8));
+      backdrop-filter: blur(10px);
+      border-radius: 48px;
+      padding: 3rem;
+      margin: 3rem 0;
+      border: 1px solid rgba(255,77,109,0.5);
+      box-shadow: 0 25px 40px -15px rgba(0,0,0,0.5);
+    }
+    .mission-badge {
+      background: rgba(255, 77, 109, 0.2);
+      border-left: 5px solid #ff4d6d;
+      padding: 1rem;
+      border-radius: 24px;
+    }
+
+    /* contact form vibrant */
+    .contact-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin: 2rem 0 4rem;
+    }
+    .contact-info, .contact-form {
+      background: rgba(10, 20, 35, 0.65);
+      backdrop-filter: blur(12px);
+      border-radius: 2rem;
+      padding: 2rem;
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      transition: 0.3s;
+    }
+    .contact-info:hover, .contact-form:hover { border-color: #ff9966; }
+    .input-group input, .input-group textarea, .input-group select {
+      width: 100%;
+      background: #111827;
+      border: 1px solid #2c3e66;
+      padding: 0.9rem;
+      border-radius: 28px;
+      color: white;
+      font-family: inherit;
+      transition: 0.2s;
+    }
+    .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+      border-color: #ff4d6d;
+      box-shadow: 0 0 12px #ff4d6d;
+      outline: none;
+    }
+    .btn-submit {
+      background: linear-gradient(95deg, #ff4d6d, #ff9a44);
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 40px;
+      font-weight: bold;
+      color: white;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    footer {
+      border-top: 1px solid rgba(255,77,109,0.4);
+      padding: 2rem 0;
+      text-align: center;
+      color: #b0c4ff;
+    }
+    .floating-alert {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(115deg, #0b1a2e, #1a1f3a);
+      border-right: 5px solid #0ff;
+      padding: 14px 22px;
+      border-radius: 60px;
+      z-index: 999;
+      backdrop-filter: blur(10px);
+      font-weight: 500;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    @media (max-width: 800px) {
+      .hero-content h2 { font-size: 2.5rem; }
+      .hero-visual i { font-size: 7rem; }
+      .container { padding: 0 1.2rem; }
+    }
+    .cyber-pulse {
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { text-shadow: 0 0 0px cyan; }
+      100% { text-shadow: 0 0 12px magenta; }
+    }
+  </style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+<div class="noise"></div>
+
+<header>
+  <div class="container nav-wrapper">
+    <div class="logo">
+      <h1>Arcsh<span>One</span></h1>
+      <span>✦ zero‑trust fabric ✦</span>
+    </div>
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#solutions">Solutions</a>
+      <a href="#about">About Us</a>
+      <a href="#contact">Contact</a>
+      <button class="btn-glow" id="portalTrigger"><i class="fas fa-fingerprint"></i> Secure Portal</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container" id="home">
+    <div class="hero">
+      <div class="hero-content">
+        <div class="hero-badge"><i class="fas fa-chart-line"></i> AI Threat Intelligence 2026 · NextGen SOC</div>
+        <h2>Defy <span class="gradient-text">Cyber Adversaries</span><br> with ArcshOne's <span style="color:#ff4d6d;">SIEM & Phishing</span> Armor</h2>
+        <p>Unified detection & response · AI‑driven phishing simulations · real‑time risk posture for the entire enterprise and supply chain.</p>
+        <div class="hero-stats">
+          <div class="stat"><span><i class="fas fa-bolt"></i> 99.97%</span><br> Threat Accuracy</div>
+          <div class="stat"><span><i class="fas fa-globe"></i> 2.4k+</span><br> Enterprise Clients</div>
+        </div>
+        <button class="btn-primary-neon" id="demoLiveBtn"><i class="fas fa-rocket"></i> Launch Interactive Demo</button>
+      </div>
+      <div class="hero-visual">
+        <i class="fas fa-shield-halos"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOLUTIONS SECTION -->
+  <div class="container" id="solutions">
+    <h2 class="section-title"><i class="fas fa-microchip"></i> Elite Cyber Arsenal</h2>
+    <div class="solutions-grid">
+      <div class="solution-card">
+        <div class="sol-icon"><i class="fas fa-chart-network"></i></div>
+        <h3>SIEM Titan</h3>
+        <p>Next‑gen Security Information & Event Management. 10k+ EPS, UEBA, and automated SOAR playbooks.</p>
+        <div class="card-tag">MITRE ATT&CK ready</div>
+      </div>
+      <div class="solution-card">
+        <div class="sol-icon"><i class="fas fa-fish"></i></div>
+        <h3>Phishing Arena</h3>
+        <p>Hyper‑realistic AI simulations + security awareness training. Reduce click rates by up to 85%.</p>
+        <div class="card-tag">Dark web reports</div>
+      </div>
+      <div class="solution-card">
+        <div class="sol-icon"><i class="fas fa-eye"></i></div>
+        <h3>Threat Intelligence</h3>
+        <p>Proactive threat hunting, adversary emulation, and 0‑day early warning system.</p>
+        <div class="card-tag">24/7 MDR</div>
+      </div>
+      <div class="solution-card">
+        <div class="sol-icon"><i class="fas fa-link"></i></div>
+        <h3>SupplyChain Shield</h3>
+        <p>NIST/CMMC compliance, third‑party risk scoring, POAM templates & vendor validation.</p>
+        <div class="card-tag">FedRAMP aligned</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT US enhanced -->
+  <div class="container" id="about">
+    <div class="about-section">
+      <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
+        <div style="flex:2">
+          <h3 style="font-size: 2.3rem; background: linear-gradient(135deg,#fff, #ffb347); -webkit-background-clip:text; background-clip:text; color:transparent;"><i class="fas fa-shield-virus"></i> About ArcshOne</h3>
+          <p style="margin-top:1rem;">ArcshOne fuses elite cybersecurity craftsmanship with AI-driven automation. Our founders — former NSA cyber operators and Fortune 500 CISOs — built a platform that speaks the language of both security engineers and board members.</p>
+          <p>We provide unified visibility across SIEM, phishing defense, and compliance, enabling organizations to prioritize risks and respond before breaches happen. Our enterprise licenses empower primes and subs with real-time supply chain readiness.</p>
+          <div class="mission-badge">
+            <i class="fas fa-crown"></i> <strong>Our promise:</strong> democratize world‑class security, reduce complexity, and make cyber resilience beautiful.
+          </div>
+          <div style="margin-top: 1.2rem;"><span style="background: linear-gradient(95deg,#ff4d6d,#ffaa33); padding: 0.3rem 1.2rem; border-radius: 60px;">⭐ Gartner® Cool Vendor 2025</span></div>
+        </div>
+        <div style="flex:1; display: flex; align-items: center; justify-content: center;">
+          <i class="fas fa-chart-line" style="font-size: 7rem; background: linear-gradient(145deg,#0ff,#ff77aa); -webkit-background-clip:text; background-clip:text; color:transparent;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT + vibrant form -->
+  <div class="container" id="contact">
+    <h2 class="section-title"><i class="fas fa-envelope-open-text"></i> Encrypted Concierge</h2>
+    <div class="contact-flex">
+      <div class="contact-info">
+        <h3><i class="fas fa-address-card"></i> Connect Securely</h3>
+        <p style="margin: 1rem 0;"><i class="fas fa-map-marker-alt" style="color:#ff7b89;"></i> 1010 Cybernetic Ave, Austin, TX</p>
+        <p><i class="fas fa-phone-alt"></i> +1 (833) ARC-SHIELD (272-7445)</p>
+        <p><i class="fas fa-envelope"></i> protect@arcshone.com</p>
+        <p><i class="fas fa-lock"></i> PGP fingerprint: 7A3F 9E22 BC44 11F0</p>
+        <hr style="margin: 1rem 0; border-color: #ff4d6d;">
+        <div><i class="fas fa-headset"></i> 24/7 Incident Response Hotline</div>
+      </div>
+      <div class="contact-form">
+        <h3>Request a Personalized Demo</h3>
+        <form id="vibrantForm">
+          <div class="input-group"><input type="text" placeholder="Full name *" id="fullName" required></div>
+          <div class="input-group"><input type="email" placeholder="Business email *" id="businessEmail" required></div>
+          <div class="input-group"><input type="tel" placeholder="Phone (optional)"></div>
+          <div class="input-group">
+            <select id="solutionInterest">
+              <option value="SIEM & Analytics">🚀 SIEM & Analytics</option>
+              <option value="Phishing Simulations">🎣 Phishing Simulations & Training</option>
+              <option value="Supply Chain Security">🔗 Supply Chain / CMMC</option>
+              <option value="Threat Hunting">🕵️ Advanced Threat Hunting</option>
+            </select>
+          </div>
+          <div class="input-group"><textarea rows="2" placeholder="Describe your security challenges..."></textarea></div>
+          <button type="submit" class="btn-submit"><i class="fas fa-shield-alt"></i> Submit Secure Request</button>
+          <p style="font-size: 0.7rem; margin-top: 1rem;">🔒 256‑bit encrypted. We'll never share your data.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+      <div>© 2026 ArcshOne — Intelligent Cyber Resilience. All rights reserved.</div>
+      <div><a href="#" style="color:#ffaa88;">Privacy Pledge</a> | <a href="#" style="color:#ffaa88;">Trust Center</a> | <i class="fas fa-shield-alt"></i> SOC2 Type II</div>
+    </div>
+  </div>
+</footer>
+
+<div class="floating-alert" id="toastMsg">
+  <i class="fas fa-check-circle" style="color:#0ff; font-size: 1.3rem;"></i> <span id="toastText">Action confirmed</span>
+</div>
+
+<script>
+  const toast = document.getElementById('toastMsg');
+  const toastText = document.getElementById('toastText');
+  function showFancyToast(message, isError = false) {
+    toast.style.display = 'flex';
+    toastText.innerText = message;
+    if(isError) {
+      toast.style.borderRightColor = '#ff4d6d';
+    } else {
+      toast.style.borderRightColor = '#0ff';
+    }
+    setTimeout(() => { toast.style.display = 'none'; }, 3800);
+  }
+
+  document.getElementById('demoLiveBtn').addEventListener('click', () => {
+    showFancyToast('🚀 ArcshOne demo environment spinning up — a specialist will contact you within 2h!');
+  });
+  document.getElementById('portalTrigger').addEventListener('click', () => {
+    showFancyToast('🔐 Secure portal access: early access program — request credentials at protect@arcshone.com');
+  });
+
+  const contactForm = document.getElementById('vibrantForm');
+  contactForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('businessEmail').value.trim();
+    if(!name || !email || !email.includes('@')) {
+      showFancyToast('⚠️ Valid name & business email required.', true);
+      return;
+    }
+    showFancyToast(`✨ Thanks ${name.split(' ')[0]}! Your security demo request is now in our SOC queue. We'll respond within 12h.`);
+    contactForm.reset();
+  });
+
+  // smooth scroll for all internal links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = this.getAttribute('href');
+      if(target && target !== '#') {
+        const element = document.querySelector(target);
+        if(element) {
+          e.preventDefault();
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>
