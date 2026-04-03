@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>ArcshOne | SIEM & Cyber Simulations – Defend Without SOC</title>
+  <title>ArcshOne | AI-Powered SIEM & Cyber Simulations – Defend Without SOC</title>
   <!-- Google Fonts + Font Awesome -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- AOS Library for scroll animations -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <!-- Favicon from GitHub repo -->
   <link rel="icon" type="image/x-icon" href="https://github.com/Chiru-ai/ArcshOne/raw/main/A1_icon.ico">
   <style>
@@ -25,22 +27,38 @@
       overflow-x: hidden;
     }
 
-    /* animated gradient orbs - deep cyber vibe */
+    /* animated gradient orbs - enhanced */
     .orb {
       position: fixed;
       border-radius: 50%;
-      filter: blur(100px);
-      opacity: 0.35;
+      filter: blur(120px);
+      opacity: 0.45;
       z-index: -1;
       pointer-events: none;
       animation: floatOrb 22s infinite alternate ease-in-out;
     }
-    .orb1 { width: 550px; height: 550px; background: radial-gradient(circle, #ff3366, #a020f0); top: -150px; left: -200px; }
-    .orb2 { width: 700px; height: 700px; background: radial-gradient(circle, #00ccff, #2b59ff); bottom: -250px; right: -150px; animation-duration: 26s; }
-    .orb3 { width: 450px; height: 450px; background: radial-gradient(circle, #ffaa33, #ff4d6d); top: 30%; left: 70%; animation-duration: 19s; opacity: 0.3; }
+    .orb1 { width: 600px; height: 600px; background: radial-gradient(circle, #ff3366, #a020f0); top: -200px; left: -250px; }
+    .orb2 { width: 750px; height: 750px; background: radial-gradient(circle, #00ccff, #2b59ff); bottom: -250px; right: -180px; animation-duration: 28s; }
+    .orb3 { width: 500px; height: 500px; background: radial-gradient(circle, #ffaa33, #ff4d6d); top: 30%; left: 70%; animation-duration: 19s; opacity: 0.4; }
+    .orb4 { width: 400px; height: 400px; background: radial-gradient(circle, #7a2be0, #00e0ff); top: 60%; left: 10%; animation-duration: 25s; opacity: 0.3; }
     @keyframes floatOrb {
       0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(70px, 50px) scale(1.2); }
+      100% { transform: translate(80px, 60px) scale(1.25); }
+    }
+
+    /* cyber grid overlay */
+    .cyber-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
     }
 
     /* noise texture overlay */
@@ -52,9 +70,9 @@
       width: 100%;
       height: 100%;
       background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjciIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMDQiLz48L3N2Zz4=');
-      opacity: 0.06;
+      opacity: 0.05;
       pointer-events: none;
-      z-index: 2;
+      z-index: 1;
     }
 
     .container {
@@ -65,16 +83,22 @@
       z-index: 5;
     }
 
-    /* glassmorphic header */
+    /* glassmorphic header with glow */
     header {
       padding: 0.8rem 0;
       backdrop-filter: blur(18px);
-      background: rgba(5, 8, 20, 0.7);
-      border-bottom: 1px solid rgba(0, 255, 255, 0.35);
+      background: rgba(5, 8, 20, 0.8);
+      border-bottom: 1px solid rgba(0, 255, 255, 0.5);
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transition: all 0.3s;
+    }
+    header.scrolled {
+      background: rgba(5, 8, 20, 0.95);
+      border-bottom-color: #ff4d6d;
+      box-shadow: 0 4px 30px rgba(255,77,109,0.2);
     }
 
     .nav-wrapper {
@@ -93,14 +117,15 @@
     .logo img {
       height: 48px;
       width: auto;
-      filter: drop-shadow(0 0 6px rgba(0,255,255,0.4));
-      transition: transform 0.2s;
+      filter: drop-shadow(0 0 8px rgba(0,255,255,0.6));
+      transition: transform 0.3s, filter 0.3s;
     }
     .logo img:hover {
-      transform: scale(1.02);
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 12px #ff4d6d);
     }
     .logo-text h1 {
-      font-size: 1.9rem;
+      font-size: 2rem;
       font-weight: 800;
       background: linear-gradient(125deg, #FFFFFF, #4d9eff, #ff4d9e);
       -webkit-background-clip: text;
@@ -108,6 +133,11 @@
       color: transparent;
       letter-spacing: -0.02em;
       line-height: 1.2;
+      animation: textShine 4s infinite alternate;
+    }
+    @keyframes textShine {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
     }
     .logo-text span {
       font-size: 0.7rem;
@@ -128,7 +158,7 @@
       color: #e2eaff;
       text-decoration: none;
       font-weight: 500;
-      transition: 0.25s;
+      transition: 0.3s;
       position: relative;
     }
     .nav-links a::after {
@@ -142,27 +172,40 @@
       transition: 0.3s;
     }
     .nav-links a:hover::after { width: 100%; }
-    .nav-links a:hover { color: #ffffff; text-shadow: 0 0 6px cyan; }
+    .nav-links a:hover { color: #ffffff; text-shadow: 0 0 8px cyan; }
 
     .btn-glow {
       background: linear-gradient(105deg, #ff3b6f, #9b4dff);
       border: none;
-      padding: 0.55rem 1.5rem;
+      padding: 0.6rem 1.6rem;
       border-radius: 40px;
       color: white;
       font-weight: 600;
       transition: all 0.3s;
-      box-shadow: 0 0 12px rgba(255,59,111,0.4);
+      box-shadow: 0 0 12px rgba(255,59,111,0.5);
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
     }
+    .btn-glow::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: 0.5s;
+    }
+    .btn-glow:hover::before { left: 120%; }
     .btn-glow:hover {
-      transform: scale(1.03);
+      transform: scale(1.05);
       box-shadow: 0 0 22px #ff3b6f;
     }
 
     /* hero section */
     .hero {
-      padding: 5rem 0 3rem;
+      padding: 6rem 0 4rem;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -175,16 +218,22 @@
       gap: 8px;
       background: rgba(0, 255, 255, 0.15);
       backdrop-filter: blur(8px);
-      padding: 0.4rem 1.2rem;
+      padding: 0.5rem 1.4rem;
       border-radius: 60px;
       font-size: 0.85rem;
       font-weight: 500;
-      border: 1px solid rgba(0,255,200,0.5);
+      border: 1px solid rgba(0,255,200,0.6);
       color: #b3ffff;
       margin-bottom: 1.8rem;
+      animation: pulseBadge 2s infinite;
+    }
+    @keyframes pulseBadge {
+      0% { box-shadow: 0 0 0 0 rgba(0,255,255,0.4); }
+      70% { box-shadow: 0 0 0 8px rgba(0,255,255,0); }
+      100% { box-shadow: 0 0 0 0 rgba(0,255,255,0); }
     }
     .hero-content h2 {
-      font-size: 3.8rem;
+      font-size: 4rem;
       font-weight: 800;
       line-height: 1.2;
       background: linear-gradient(135deg, #FFFFFF, #5dade2, #f368e0);
@@ -221,37 +270,54 @@
     .btn-primary-neon {
       background: linear-gradient(95deg, #00c6ff, #0072ff);
       border: none;
-      padding: 1rem 2.2rem;
+      padding: 1rem 2.4rem;
       font-weight: 700;
       border-radius: 60px;
       font-size: 1rem;
       cursor: pointer;
-      transition: all 0.25s;
-      box-shadow: 0 8px 20px rgba(0,114,255,0.4);
+      transition: all 0.3s;
+      box-shadow: 0 8px 20px rgba(0,114,255,0.5);
       color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary-neon::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: 0.5s;
+    }
+    .btn-primary-neon:hover::before { left: 120%; }
+    .btn-primary-neon:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0,114,255,0.6);
     }
     .hero-visual i {
-      font-size: 10rem;
+      font-size: 12rem;
       filter: drop-shadow(0 0 28px #ff4d9e) drop-shadow(0 0 18px #00ffff);
       animation: levitate 4s infinite alternate;
     }
     @keyframes levitate {
-      0% { transform: translateY(0px); }
-      100% { transform: translateY(-20px); }
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-25px) rotate(3deg); }
     }
 
-    /* Full page sections styling (each takes approx 1 page) */
+    /* Full page sections styling */
     .full-page-section {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 4rem 0;
+      padding: 5rem 0;
       scroll-margin-top: 80px;
       border-bottom: 1px solid rgba(0,255,255,0.2);
     }
     .section-title-lg {
-      font-size: 3rem;
+      font-size: 3.2rem;
       font-weight: 800;
       margin-bottom: 2rem;
       background: linear-gradient(125deg, #fff, #4d9eff, #ff77aa);
@@ -263,7 +329,7 @@
     }
     .attack-grid, .sim-benefits-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
       gap: 2rem;
       margin: 2rem 0;
     }
@@ -273,15 +339,17 @@
       border-radius: 2rem;
       padding: 2rem;
       border: 1px solid rgba(0, 255, 255, 0.3);
-      transition: all 0.3s;
+      transition: all 0.4s;
+      cursor: pointer;
     }
     .attack-card:hover, .benefit-card:hover {
-      transform: translateY(-8px);
+      transform: translateY(-12px);
       border-color: #ff4d6d;
-      box-shadow: 0 20px 35px -12px rgba(255,77,109,0.3);
+      box-shadow: 0 25px 40px -12px rgba(255,77,109,0.4);
+      background: rgba(20, 30, 55, 0.85);
     }
     .attack-card i, .benefit-card i {
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       background: linear-gradient(135deg, #0ff, #f0f);
       -webkit-background-clip: text;
       background-clip: text;
@@ -289,9 +357,11 @@
       margin-bottom: 1rem;
       display: inline-block;
     }
-    .attack-card h3, .benefit-card h3 {
-      font-size: 1.8rem;
-      margin-bottom: 0.75rem;
+    .stats-row {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
     }
     .stat-badge {
       background: rgba(255,77,109,0.2);
@@ -303,69 +373,68 @@
       margin-top: 1rem;
       color: #ffaa88;
     }
-    .stats-row {
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-      margin-top: 1.2rem;
-    }
     .simulation-case {
       background: linear-gradient(135deg, rgba(0,255,200,0.1), rgba(255,77,109,0.1));
       border-radius: 2rem;
       padding: 2rem;
       margin-top: 2rem;
       border-left: 6px solid #0ff;
+      transition: 0.3s;
     }
-    hr {
-      border-color: #ff4d6d40;
-      margin: 1rem 0;
+    .simulation-case:hover {
+      transform: scale(1.01);
+      border-left-color: #ff4d6d;
     }
     .btn-outline-cyber {
       background: transparent;
-      border: 1px solid cyan;
+      border: 1.5px solid cyan;
       padding: 0.7rem 1.8rem;
       border-radius: 60px;
       color: cyan;
       font-weight: 600;
-      transition: 0.2s;
+      transition: 0.3s;
       cursor: pointer;
-      margin-top: 1rem;
     }
     .btn-outline-cyber:hover {
       background: cyan;
       color: #05070f;
-      box-shadow: 0 0 12px cyan;
+      box-shadow: 0 0 16px cyan;
+      transform: translateY(-2px);
     }
 
-    /* solutions + other sections */
+    /* solutions grid */
     .solutions-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 2.5rem;
       justify-content: center;
-      margin: 2rem 0 3rem;
+      margin: 3rem 0 4rem;
     }
     .solution-card {
-      background: rgba(15, 25, 45, 0.65);
+      background: rgba(15, 25, 45, 0.7);
       backdrop-filter: blur(14px);
       border-radius: 2rem;
-      padding: 2.2rem;
-      width: 320px;
+      padding: 2.5rem;
+      width: 340px;
       transition: all 0.4s;
-      border: 1px solid rgba(0, 255, 255, 0.25);
+      border: 1px solid rgba(0, 255, 255, 0.3);
+      text-align: center;
     }
     .solution-card:hover {
       border-color: #ff4d6d;
-      transform: translateY(-12px);
+      transform: translateY(-15px);
+      box-shadow: 0 20px 35px -10px rgba(255,77,109,0.3);
     }
     .sol-icon {
-      font-size: 3.6rem;
+      font-size: 4rem;
       background: linear-gradient(145deg, #0ff, #f0f);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
       margin-bottom: 1rem;
     }
+
+    /* contact section */
     .contact-flex {
       display: flex;
       flex-wrap: wrap;
@@ -373,12 +442,17 @@
       margin: 2rem 0 4rem;
     }
     .contact-info, .contact-form {
-      background: rgba(10, 20, 35, 0.7);
+      background: rgba(10, 20, 35, 0.8);
       backdrop-filter: blur(12px);
       border-radius: 2rem;
-      padding: 2rem;
+      padding: 2.2rem;
       flex: 1;
-      border: 1px solid rgba(0,255,255,0.25);
+      border: 1px solid rgba(0,255,255,0.3);
+      transition: 0.3s;
+    }
+    .contact-info:hover, .contact-form:hover {
+      border-color: #ff4d6d;
+      box-shadow: 0 10px 30px rgba(255,77,109,0.2);
     }
     .input-group input, .input-group textarea, .input-group select {
       width: 100%;
@@ -388,6 +462,12 @@
       border-radius: 28px;
       color: white;
       margin-bottom: 1rem;
+      transition: 0.2s;
+    }
+    .input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+      outline: none;
+      border-color: #0ff;
+      box-shadow: 0 0 8px rgba(0,255,255,0.3);
     }
     .btn-submit {
       background: linear-gradient(95deg, #ff4d6d, #ff9a44);
@@ -398,11 +478,17 @@
       color: white;
       width: 100%;
       cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255,77,109,0.4);
     }
     footer {
-      border-top: 1px solid rgba(255,77,109,0.4);
+      border-top: 1px solid rgba(255,77,109,0.5);
       padding: 2rem 0;
       text-align: center;
+      background: rgba(5, 7, 15, 0.9);
     }
     .floating-alert {
       position: fixed;
@@ -410,24 +496,30 @@
       right: 30px;
       background: linear-gradient(115deg, #0b1a2e, #1a1f3a);
       border-right: 5px solid #0ff;
-      padding: 14px 22px;
+      padding: 14px 24px;
       border-radius: 60px;
       z-index: 999;
       backdrop-filter: blur(10px);
       display: none;
       align-items: center;
       gap: 12px;
+      font-weight: 500;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
     @media (max-width: 800px) {
-      .hero-content h2 { font-size: 2.5rem; }
-      .section-title-lg { font-size: 2rem; }
+      .container { padding: 0 1.2rem; }
+      .hero-content h2 { font-size: 2.2rem; }
+      .section-title-lg { font-size: 1.8rem; }
+      .hero-visual i { font-size: 6rem; }
     }
   </style>
 </head>
 <body>
+<div class="cyber-grid"></div>
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
 <div class="orb orb3"></div>
+<div class="orb orb4"></div>
 <div class="noise"></div>
 
 <header>
@@ -452,7 +544,7 @@
 
 <main>
   <div class="container" id="home">
-    <div class="hero">
+    <div class="hero" data-aos="fade-up" data-aos-duration="1000">
       <div class="hero-content">
         <div class="hero-badge"><i class="fas fa-chart-line"></i> AI Threat Intelligence 2026 · NextGen SOC</div>
         <h2>Defy <span class="gradient-text">Cyber Adversaries</span><br> with ArcshOne's <span style="color:#ff4d6d;">SIEM & Simulations</span></h2>
@@ -463,19 +555,19 @@
         </div>
         <button class="btn-primary-neon" id="demoLiveBtn"><i class="fas fa-rocket"></i> Launch Interactive Demo</button>
       </div>
-      <div class="hero-visual">
+      <div class="hero-visual" data-aos="zoom-in" data-aos-duration="1200">
         <i class="fas fa-shield-halos"></i>
       </div>
     </div>
   </div>
 
-  <!-- ========== FULL PAGE 1: RECENT MARKET CYBER ATTACKS WITHOUT SOC ========== -->
+  <!-- FULL PAGE 1: RECENT MARKET CYBER ATTACKS WITHOUT SOC -->
   <div class="container full-page-section" id="market-attacks">
-    <h2 class="section-title-lg"><i class="fas fa-skull-crosswalk"></i> The Hidden Crisis: Recent Market Cyber Attacks Without SOC</h2>
-    <p style="font-size:1.2rem; margin-bottom:2rem;">Organizations lacking a Security Operations Center (SOC) face uncontained breaches, weeks of dwell time, and catastrophic financial fallout. Below are real-world case studies from 2025–2026 that expose the brutal reality.</p>
+    <h2 class="section-title-lg" data-aos="fade-right"><i class="fas fa-skull-crosswalk"></i> The Hidden Crisis: Recent Market Cyber Attacks Without SOC</h2>
+    <p style="font-size:1.2rem; margin-bottom:2rem;" data-aos="fade-up">Organizations lacking a Security Operations Center (SOC) face uncontained breaches, weeks of dwell time, and catastrophic financial fallout. Below are real-world case studies from 2025–2026 that expose the brutal reality.</p>
     
     <div class="attack-grid">
-      <div class="attack-card">
+      <div class="attack-card" data-aos="flip-left" data-aos-delay="100">
         <i class="fas fa-building"></i>
         <h3>Fintech Unicorn Breach</h3>
         <p>A high-growth fintech with <strong>no dedicated SOC</strong> suffered a supply-chain ransomware via an exposed API. Without 24/7 monitoring, attackers moved laterally for 23 days, exfiltrating 1.2M customer records.</p>
@@ -485,7 +577,7 @@
         </div>
         <div class="stat-badge">⚠️ No SIEM correlation → undetected</div>
       </div>
-      <div class="attack-card">
+      <div class="attack-card" data-aos="flip-left" data-aos-delay="200">
         <i class="fas fa-hospital-user"></i>
         <h3>Midwest Health System</h3>
         <p>Lacking a SOC, this hospital network missed credential phishing that gave attackers access to EHR systems. Ransomware deployment paralyzed 3 ICUs for 11 days. Regulatory fines exceeded $9.5M.</p>
@@ -495,7 +587,7 @@
         </div>
         <div class="stat-badge">🔴 No threat hunting → Ransomware success</div>
       </div>
-      <div class="attack-card">
+      <div class="attack-card" data-aos="flip-left" data-aos-delay="300">
         <i class="fas fa-graduation-cap"></i>
         <h3>Global University Data Heist</h3>
         <p>Without a SOC, a top university fell victim to a sophisticated spear-phishing campaign. Attackers maintained persistence for 8 months, stealing research IP and 50k SSNs. Insurance premiums skyrocketed 340%.</p>
@@ -507,34 +599,34 @@
       </div>
     </div>
 
-    <div style="background: rgba(255,77,109,0.15); border-radius: 2rem; padding: 1.8rem; margin: 2rem 0;">
+    <div style="background: linear-gradient(135deg, rgba(255,77,109,0.15), rgba(0,255,255,0.08)); border-radius: 2rem; padding: 1.8rem; margin: 2rem 0;" data-aos="fade-up">
       <h3><i class="fas fa-chart-simple"></i> 2026 Threat Landscape: No SOC = Critical Blindness</h3>
       <p>According to ArcshOne Cyber Risk Index (Q1 2026), companies without a formal SOC or SIEM platform experience <strong>4.7x higher average breach cost</strong> ($5.2M vs $1.1M) and <strong>detection takes 197 days</strong> compared to 24 hours with modern SOC. Recent market attacks exploited lack of log aggregation, zero threat intelligence integration, and no incident response playbooks — turning minor incidents into existential crises.</p>
     </div>
-    <div style="display: flex; justify-content: flex-end;">
+    <div style="display: flex; justify-content: flex-end;" data-aos="fade-left">
       <button class="btn-outline-cyber" id="learnMoreAttacksBtn"><i class="fas fa-chart-line"></i> See Full Report Analysis →</button>
     </div>
   </div>
 
-  <!-- ========== FULL PAGE 2: HOW SIMULATION CAN HELP CUSTOMERS ========== -->
+  <!-- FULL PAGE 2: HOW SIMULATION CAN HELP CUSTOMERS -->
   <div class="container full-page-section" id="simulation-power">
-    <h2 class="section-title-lg"><i class="fas fa-chalkboard-user"></i> Simulation-Driven Resilience: How Cyber Simulations Empower Customers</h2>
-    <p style="font-size:1.2rem; margin-bottom:1.5rem;">Modern adversaries exploit human error and unvalidated defenses. ArcshOne’s <strong>AI-driven simulation platform</strong> transforms security posture by stress-testing people, processes, and technology in a risk-free environment.</p>
+    <h2 class="section-title-lg" data-aos="fade-right"><i class="fas fa-chalkboard-user"></i> Simulation-Driven Resilience: How Cyber Simulations Empower Customers</h2>
+    <p style="font-size:1.2rem; margin-bottom:1.5rem;" data-aos="fade-up">Modern adversaries exploit human error and unvalidated defenses. ArcshOne's <strong>AI-driven simulation platform</strong> transforms security posture by stress-testing people, processes, and technology in a risk-free environment.</p>
     
     <div class="sim-benefits-grid">
-      <div class="benefit-card">
+      <div class="benefit-card" data-aos="zoom-in-up" data-aos-delay="100">
         <i class="fas fa-brain"></i>
         <h3>Human Risk Reduction</h3>
         <p>Automated phishing simulations & gamified training reduce click-through rates by 85% in 90 days. Behavioral analytics identify high-risk personas for targeted coaching.</p>
         <div class="stat-badge">✅ 78% improvement in reporting simulations</div>
       </div>
-      <div class="benefit-card">
+      <div class="benefit-card" data-aos="zoom-in-up" data-aos-delay="200">
         <i class="fas fa-chart-network"></i>
         <h3>Incident Response Muscle Memory</h3>
         <p>Tabletop exercises & breach simulations align IT, leadership and legal teams. Realistic ransomware scenarios reduce mean time to respond (MTTR) by 63% during actual incidents.</p>
         <div class="stat-badge">⚡ 4.2x faster containment in drills</div>
       </div>
-      <div class="benefit-card">
+      <div class="benefit-card" data-aos="zoom-in-up" data-aos-delay="300">
         <i class="fas fa-shield-virus"></i>
         <h3>Control Validation & Gap Discovery</h3>
         <p>Simulate adversary TTPs (MITRE ATT&CK) to test EDR, firewalls, and SIEM rules without real malware. Uncover misconfigurations before attackers exploit them.</p>
@@ -542,7 +634,7 @@
       </div>
     </div>
 
-    <div class="simulation-case">
+    <div class="simulation-case" data-aos="fade-up">
       <i class="fas fa-chart-line" style="font-size: 2rem; margin-right: 1rem;"></i>
       <strong style="font-size:1.3rem;">Real Customer Outcome: Global Manufacturer</strong>
       <p>After deploying ArcshOne's simulation suite (phishing + breach simulation), the manufacturer decreased successful phishing attempts from 14% to 1.8% within 4 months. Moreover, a red-team simulation exposed a critical domain admin credential exposure that was remediated prior to a real attack attempt. The client avoided an estimated $7.2M breach and reduced cyber insurance premium by 32%.</p>
@@ -552,7 +644,7 @@
       </div>
     </div>
 
-    <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-top: 2rem;">
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-top: 2rem;" data-aos="fade-up">
       <div><i class="fas fa-robot"></i> AI-driven scenario generation based on real threat intel</div>
       <button class="btn-glow" id="simulationDemoBtn"><i class="fas fa-play"></i> Request Live Simulation Demo</button>
     </div>
@@ -560,22 +652,22 @@
 
   <!-- SOLUTIONS SECTION: SIEM & SIMULATIONS -->
   <div class="container" id="solutions" style="padding-top: 3rem;">
-    <h2 class="section-title-lg">Elite Cyber Arsenal: SIEM + Simulations</h2>
+    <h2 class="section-title-lg" data-aos="fade-right">Elite Cyber Arsenal: SIEM + Simulations</h2>
     <div class="solutions-grid">
-      <div class="solution-card">
+      <div class="solution-card" data-aos="flip-right" data-aos-delay="100">
         <div class="sol-icon"><i class="fas fa-chart-network"></i></div>
         <h3>SIEM Titan</h3>
         <p>Next‑gen Security Information & Event Management. 10k+ EPS, UEBA, and automated SOAR playbooks.</p>
-        <ul class="feature-list" style="list-style: none;">
+        <ul style="list-style: none; margin-top: 1rem;">
           <li><i class="fas fa-check-circle"></i> Real-time threat correlation</li>
           <li><i class="fas fa-check-circle"></i> AI-powered anomaly detection</li>
         </ul>
       </div>
-      <div class="solution-card">
+      <div class="solution-card" data-aos="flip-right" data-aos-delay="200">
         <div class="sol-icon"><i class="fas fa-fish"></i></div>
         <h3>Phishing Arena</h3>
         <p>Hyper‑realistic AI simulations + security awareness training. Reduce click rates by up to 85%.</p>
-        <ul class="feature-list" style="list-style: none;">
+        <ul style="list-style: none; margin-top: 1rem;">
           <li><i class="fas fa-check-circle"></i> Automated phishing campaigns</li>
           <li><i class="fas fa-check-circle"></i> Employee risk scoring</li>
         </ul>
@@ -583,20 +675,20 @@
     </div>
   </div>
 
-  <!-- CONTACT FORM WITH EMAILJS (mailto fallback to contact@arshone.com) -->
+  <!-- CONTACT FORM -->
   <div class="container" id="contact">
-    <h2 class="section-title-lg"><i class="fas fa-envelope-open-text"></i> Encrypted Concierge</h2>
+    <h2 class="section-title-lg" data-aos="fade-right"><i class="fas fa-envelope-open-text"></i> Encrypted Concierge</h2>
     <div class="contact-flex">
-      <div class="contact-info">
+      <div class="contact-info" data-aos="fade-right">
         <h3><i class="fas fa-address-card"></i> Connect Securely</h3>
         <p><i class="fas fa-map-marker-alt"></i> Balangir, Odisha, India</p>
-        <p><i class="fas fa-phone-alt"></i> <strong>Mobile:</strong> +91 000000000</p>
+        <p><i class="fas fa-phone-alt"></i> <strong>Mobile:</strong> +91 98765 43210</p>
         <p><i class="fas fa-envelope"></i> <strong>Email:</strong> contact@arshone.com</p>
         <p><i class="fas fa-lock"></i> PGP fingerprint: 7A3F 9E22 BC44 11F0</p>
-        <hr>
+        <hr style="margin: 1rem 0; border-color: #ff4d6d40;">
         <div><i class="fas fa-headset"></i> 24/7 Incident Response Hotline</div>
       </div>
-      <div class="contact-form">
+      <div class="contact-form" data-aos="fade-left">
         <h3>Request a Personalized Demo</h3>
         <form id="contactForm">
           <div class="input-group"><input type="text" placeholder="Full name *" id="fullName" required></div>
@@ -604,7 +696,7 @@
           <div class="input-group"><input type="tel" placeholder="Phone (optional)" id="phone"></div>
           <div class="input-group">
             <select id="solutionInterest">
-              <option value="SIEM & Analytics">🚀 A1 SIEM </option>
+              <option value="SIEM & Analytics">🚀 A1 SIEM</option>
               <option value="Phishing Simulations">🎣 A1 Simulations & Training</option>
               <option value="Both Solutions">🔥 SIEM + Simulations Bundle</option>
             </select>
@@ -620,7 +712,7 @@
 
 <footer>
   <div class="container">
-    <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
       <div>© 2026 ArcshOne — Intelligent Cyber Resilience. All rights reserved.</div>
       <div><a href="#" style="color:#ffaa88;">Privacy Pledge</a> | <a href="#" style="color:#ffaa88;">Trust Center</a> | <i class="fas fa-shield-alt"></i> SOC2 Type II</div>
     </div>
@@ -631,7 +723,17 @@
   <i class="fas fa-check-circle" style="color:#0ff;"></i> <span id="toastText">Action confirmed</span>
 </div>
 
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
+  AOS.init({ duration: 800, offset: 100, once: false, mirror: false });
+
+  // Scroll shadow for header
+  window.addEventListener('scroll', () => {
+    const header = document.querySelector('header');
+    if (window.scrollY > 20) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  });
+
   const toast = document.getElementById('toastMsg');
   const toastText = document.getElementById('toastText');
   function showToast(msg, isError = false) {
@@ -641,7 +743,7 @@
     setTimeout(() => { toast.style.display = 'none'; }, 4000);
   }
 
-  // direct mailto to contact@arshone.com
+  // mailto handler
   function sendEmailDirect(data) {
     const subject = `ArcshOne Demo Request from ${data.name}`;
     const body = `Name: ${data.name}\nEmail: ${data.email}\nPhone: ${data.phone}\nSolution: ${data.solution}\nMessage: ${data.message}\n\n-- Sent from ArcshOne Contact Form`;
